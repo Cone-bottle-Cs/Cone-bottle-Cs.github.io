@@ -3,357 +3,357 @@
 
 <head>
     <title>基于图像隐写的R6直播技术.md</title>
-    <meta http-equiv="Content-type" content="text/html;charset=UTF-8"> 
-<style>
-/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
-/*---------------------------------------------------------------------------------------------
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+    <style>
+        /* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+        /*---------------------------------------------------------------------------------------------
  *  Copyright (c) Microsoft Corporation. All rights reserved.
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
+        
+        body {
+            font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+            font-size: var(--vscode-markdown-font-size, 14px);
+            padding: 0 26px;
+            line-height: var(--vscode-markdown-line-height, 22px);
+            word-wrap: break-word;
+        }
+        
+        #code-csp-warning {
+            position: fixed;
+            top: 0;
+            right: 0;
+            color: white;
+            margin: 16px;
+            text-align: center;
+            font-size: 12px;
+            font-family: sans-serif;
+            background-color: #444444;
+            cursor: pointer;
+            padding: 6px;
+            box-shadow: 1px 1px 1px rgba(0, 0, 0, .25);
+        }
+        
+        #code-csp-warning:hover {
+            text-decoration: none;
+            background-color: #007acc;
+            box-shadow: 2px 2px 2px rgba(0, 0, 0, .25);
+        }
+        
+        body.scrollBeyondLastLine {
+            margin-bottom: calc(100vh - 22px);
+        }
+        
+        body.showEditorSelection .code-line {
+            position: relative;
+        }
+        
+        body.showEditorSelection .code-active-line:before,
+        body.showEditorSelection .code-line:hover:before {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: -12px;
+            height: 100%;
+        }
+        
+        body.showEditorSelection li.code-active-line:before,
+        body.showEditorSelection li.code-line:hover:before {
+            left: -30px;
+        }
+        
+        .vscode-light.showEditorSelection .code-active-line:before {
+            border-left: 3px solid rgba(0, 0, 0, 0.15);
+        }
+        
+        .vscode-light.showEditorSelection .code-line:hover:before {
+            border-left: 3px solid rgba(0, 0, 0, 0.40);
+        }
+        
+        .vscode-light.showEditorSelection .code-line .code-line:hover:before {
+            border-left: none;
+        }
+        
+        .vscode-dark.showEditorSelection .code-active-line:before {
+            border-left: 3px solid rgba(255, 255, 255, 0.4);
+        }
+        
+        .vscode-dark.showEditorSelection .code-line:hover:before {
+            border-left: 3px solid rgba(255, 255, 255, 0.60);
+        }
+        
+        .vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+            border-left: none;
+        }
+        
+        .vscode-high-contrast.showEditorSelection .code-active-line:before {
+            border-left: 3px solid rgba(255, 160, 0, 0.7);
+        }
+        
+        .vscode-high-contrast.showEditorSelection .code-line:hover:before {
+            border-left: 3px solid rgba(255, 160, 0, 1);
+        }
+        
+        .vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+            border-left: none;
+        }
+        
+        img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        
+        a {
+            text-decoration: none;
+        }
+        
+        a:hover {
+            text-decoration: underline;
+        }
+        
+        a:focus,
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: 1px solid -webkit-focus-ring-color;
+            outline-offset: -1px;
+        }
+        
+        hr {
+            border: 0;
+            height: 2px;
+            border-bottom: 2px solid;
+        }
+        
+        h1 {
+            padding-bottom: 0.3em;
+            line-height: 1.2;
+            border-bottom-width: 1px;
+            border-bottom-style: solid;
+        }
+        
+        h1,
+        h2,
+        h3 {
+            font-weight: normal;
+        }
+        
+        table {
+            border-collapse: collapse;
+        }
+        
+        table>thead>tr>th {
+            text-align: left;
+            border-bottom: 1px solid;
+        }
+        
+        table>thead>tr>th,
+        table>thead>tr>td,
+        table>tbody>tr>th,
+        table>tbody>tr>td {
+            padding: 5px 10px;
+        }
+        
+        table>tbody>tr+tr>td {
+            border-top: 1px solid;
+        }
+        
+        blockquote {
+            margin: 0 7px 0 5px;
+            padding: 0 16px 0 10px;
+            border-left-width: 5px;
+            border-left-style: solid;
+        }
+        
+        code {
+            font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+            font-size: 1em;
+            line-height: 1.357em;
+        }
+        
+        body.wordWrap pre {
+            white-space: pre-wrap;
+        }
+        
+        pre:not(.hljs),
+        pre.hljs code>div {
+            padding: 16px;
+            border-radius: 3px;
+            overflow: auto;
+        }
+        
+        pre code {
+            color: var(--vscode-editor-foreground);
+            tab-size: 4;
+        }
+        /** Theming */
+        
+        .vscode-light pre {
+            background-color: rgba(220, 220, 220, 0.4);
+        }
+        
+        .vscode-dark pre {
+            background-color: rgba(10, 10, 10, 0.4);
+        }
+        
+        .vscode-high-contrast pre {
+            background-color: rgb(0, 0, 0);
+        }
+        
+        .vscode-high-contrast h1 {
+            border-color: rgb(0, 0, 0);
+        }
+        
+        .vscode-light table>thead>tr>th {
+            border-color: rgba(0, 0, 0, 0.69);
+        }
+        
+        .vscode-dark table>thead>tr>th {
+            border-color: rgba(255, 255, 255, 0.69);
+        }
+        
+        .vscode-light h1,
+        .vscode-light hr,
+        .vscode-light table>tbody>tr+tr>td {
+            border-color: rgba(0, 0, 0, 0.18);
+        }
+        
+        .vscode-dark h1,
+        .vscode-dark hr,
+        .vscode-dark table>tbody>tr+tr>td {
+            border-color: rgba(255, 255, 255, 0.18);
+        }
+    </style>
 
-body {
-	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
-	font-size: var(--vscode-markdown-font-size, 14px);
-	padding: 0 26px;
-	line-height: var(--vscode-markdown-line-height, 22px);
-	word-wrap: break-word;
-}
+    <style>
+        /* Tomorrow Theme */
+        /* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+        /* Original theme - https://github.com/chriskempson/tomorrow-theme */
+        /* Tomorrow Comment */
+        
+        .hljs-comment,
+        .hljs-quote {
+            color: #8e908c;
+        }
+        /* Tomorrow Red */
+        
+        .hljs-variable,
+        .hljs-template-variable,
+        .hljs-tag,
+        .hljs-name,
+        .hljs-selector-id,
+        .hljs-selector-class,
+        .hljs-regexp,
+        .hljs-deletion {
+            color: #c82829;
+        }
+        /* Tomorrow Orange */
+        
+        .hljs-number,
+        .hljs-built_in,
+        .hljs-builtin-name,
+        .hljs-literal,
+        .hljs-type,
+        .hljs-params,
+        .hljs-meta,
+        .hljs-link {
+            color: #f5871f;
+        }
+        /* Tomorrow Yellow */
+        
+        .hljs-attribute {
+            color: #eab700;
+        }
+        /* Tomorrow Green */
+        
+        .hljs-string,
+        .hljs-symbol,
+        .hljs-bullet,
+        .hljs-addition {
+            color: #718c00;
+        }
+        /* Tomorrow Blue */
+        
+        .hljs-title,
+        .hljs-section {
+            color: #4271ae;
+        }
+        /* Tomorrow Purple */
+        
+        .hljs-keyword,
+        .hljs-selector-tag {
+            color: #8959a8;
+        }
+        
+        .hljs {
+            display: block;
+            overflow-x: auto;
+            color: #4d4d4c;
+            padding: 0.5em;
+        }
+        
+        .hljs-emphasis {
+            font-style: italic;
+        }
+        
+        .hljs-strong {
+            font-weight: bold;
+        }
+    </style>
 
-#code-csp-warning {
-	position: fixed;
-	top: 0;
-	right: 0;
-	color: white;
-	margin: 16px;
-	text-align: center;
-	font-size: 12px;
-	font-family: sans-serif;
-	background-color:#444444;
-	cursor: pointer;
-	padding: 6px;
-	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
-}
-
-#code-csp-warning:hover {
-	text-decoration: none;
-	background-color:#007acc;
-	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
-}
-
-body.scrollBeyondLastLine {
-	margin-bottom: calc(100vh - 22px);
-}
-
-body.showEditorSelection .code-line {
-	position: relative;
-}
-
-body.showEditorSelection .code-active-line:before,
-body.showEditorSelection .code-line:hover:before {
-	content: "";
-	display: block;
-	position: absolute;
-	top: 0;
-	left: -12px;
-	height: 100%;
-}
-
-body.showEditorSelection li.code-active-line:before,
-body.showEditorSelection li.code-line:hover:before {
-	left: -30px;
-}
-
-.vscode-light.showEditorSelection .code-active-line:before {
-	border-left: 3px solid rgba(0, 0, 0, 0.15);
-}
-
-.vscode-light.showEditorSelection .code-line:hover:before {
-	border-left: 3px solid rgba(0, 0, 0, 0.40);
-}
-
-.vscode-light.showEditorSelection .code-line .code-line:hover:before {
-	border-left: none;
-}
-
-.vscode-dark.showEditorSelection .code-active-line:before {
-	border-left: 3px solid rgba(255, 255, 255, 0.4);
-}
-
-.vscode-dark.showEditorSelection .code-line:hover:before {
-	border-left: 3px solid rgba(255, 255, 255, 0.60);
-}
-
-.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
-	border-left: none;
-}
-
-.vscode-high-contrast.showEditorSelection .code-active-line:before {
-	border-left: 3px solid rgba(255, 160, 0, 0.7);
-}
-
-.vscode-high-contrast.showEditorSelection .code-line:hover:before {
-	border-left: 3px solid rgba(255, 160, 0, 1);
-}
-
-.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
-	border-left: none;
-}
-
-img {
-	max-width: 100%;
-	max-height: 100%;
-}
-
-a {
-	text-decoration: none;
-}
-
-a:hover {
-	text-decoration: underline;
-}
-
-a:focus,
-input:focus,
-select:focus,
-textarea:focus {
-	outline: 1px solid -webkit-focus-ring-color;
-	outline-offset: -1px;
-}
-
-hr {
-	border: 0;
-	height: 2px;
-	border-bottom: 2px solid;
-}
-
-h1 {
-	padding-bottom: 0.3em;
-	line-height: 1.2;
-	border-bottom-width: 1px;
-	border-bottom-style: solid;
-}
-
-h1, h2, h3 {
-	font-weight: normal;
-}
-
-table {
-	border-collapse: collapse;
-}
-
-table > thead > tr > th {
-	text-align: left;
-	border-bottom: 1px solid;
-}
-
-table > thead > tr > th,
-table > thead > tr > td,
-table > tbody > tr > th,
-table > tbody > tr > td {
-	padding: 5px 10px;
-}
-
-table > tbody > tr + tr > td {
-	border-top: 1px solid;
-}
-
-blockquote {
-	margin: 0 7px 0 5px;
-	padding: 0 16px 0 10px;
-	border-left-width: 5px;
-	border-left-style: solid;
-}
-
-code {
-	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
-	font-size: 1em;
-	line-height: 1.357em;
-}
-
-body.wordWrap pre {
-	white-space: pre-wrap;
-}
-
-pre:not(.hljs),
-pre.hljs code > div {
-	padding: 16px;
-	border-radius: 3px;
-	overflow: auto;
-}
-
-pre code {
-	color: var(--vscode-editor-foreground);
-	tab-size: 4;
-}
-
-/** Theming */
-
-.vscode-light pre {
-	background-color: rgba(220, 220, 220, 0.4);
-}
-
-.vscode-dark pre {
-	background-color: rgba(10, 10, 10, 0.4);
-}
-
-.vscode-high-contrast pre {
-	background-color: rgb(0, 0, 0);
-}
-
-.vscode-high-contrast h1 {
-	border-color: rgb(0, 0, 0);
-}
-
-.vscode-light table > thead > tr > th {
-	border-color: rgba(0, 0, 0, 0.69);
-}
-
-.vscode-dark table > thead > tr > th {
-	border-color: rgba(255, 255, 255, 0.69);
-}
-
-.vscode-light h1,
-.vscode-light hr,
-.vscode-light table > tbody > tr + tr > td {
-	border-color: rgba(0, 0, 0, 0.18);
-}
-
-.vscode-dark h1,
-.vscode-dark hr,
-.vscode-dark table > tbody > tr + tr > td {
-	border-color: rgba(255, 255, 255, 0.18);
-}
-
-</style>
-
-<style>
-/* Tomorrow Theme */
-/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
-/* Original theme - https://github.com/chriskempson/tomorrow-theme */
-
-/* Tomorrow Comment */
-.hljs-comment,
-.hljs-quote {
-	color: #8e908c;
-}
-
-/* Tomorrow Red */
-.hljs-variable,
-.hljs-template-variable,
-.hljs-tag,
-.hljs-name,
-.hljs-selector-id,
-.hljs-selector-class,
-.hljs-regexp,
-.hljs-deletion {
-	color: #c82829;
-}
-
-/* Tomorrow Orange */
-.hljs-number,
-.hljs-built_in,
-.hljs-builtin-name,
-.hljs-literal,
-.hljs-type,
-.hljs-params,
-.hljs-meta,
-.hljs-link {
-	color: #f5871f;
-}
-
-/* Tomorrow Yellow */
-.hljs-attribute {
-	color: #eab700;
-}
-
-/* Tomorrow Green */
-.hljs-string,
-.hljs-symbol,
-.hljs-bullet,
-.hljs-addition {
-	color: #718c00;
-}
-
-/* Tomorrow Blue */
-.hljs-title,
-.hljs-section {
-	color: #4271ae;
-}
-
-/* Tomorrow Purple */
-.hljs-keyword,
-.hljs-selector-tag {
-	color: #8959a8;
-}
-
-.hljs {
-	display: block;
-	overflow-x: auto;
-	color: #4d4d4c;
-	padding: 0.5em;
-}
-
-.hljs-emphasis {
-	font-style: italic;
-}
-
-.hljs-strong {
-	font-weight: bold;
-}
-</style>
-
-<style>
-/*
+    <style>
+        /*
  * Markdown PDF CSS
  */
-
- body {
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
-	padding: 0 12px;
-}
-
-pre {
-	background-color: #f8f8f8;
-	border: 1px solid #cccccc;
-	border-radius: 3px;
-	overflow-x: auto;
-	white-space: pre-wrap;
-	overflow-wrap: break-word;
-}
-
-pre:not(.hljs) {
-	padding: 23px;
-	line-height: 19px;
-}
-
-blockquote {
-	background: rgba(127, 127, 127, 0.1);
-	border-color: rgba(0, 122, 204, 0.5);
-}
-
-.emoji {
-	height: 1.4em;
-}
-
-code {
-	font-size: 14px;
-	line-height: 19px;
-}
-
-/* for inline code */
-:not(pre):not(.hljs) > code {
-	color: #C9AE75; /* Change the old color so it seems less like an error */
-	font-size: inherit;
-}
-
-/* Page Break : use <div class="page"/> to insert page break
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+            padding: 0 12px;
+        }
+        
+        pre {
+            background-color: #f8f8f8;
+            border: 1px solid #cccccc;
+            border-radius: 3px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            overflow-wrap: break-word;
+        }
+        
+        pre:not(.hljs) {
+            padding: 23px;
+            line-height: 19px;
+        }
+        
+        blockquote {
+            background: rgba(127, 127, 127, 0.1);
+            border-color: rgba(0, 122, 204, 0.5);
+        }
+        
+        .emoji {
+            height: 1.4em;
+        }
+        
+        code {
+            font-size: 14px;
+            line-height: 19px;
+        }
+        /* for inline code */
+        
+        :not(pre):not(.hljs)>code {
+            color: #C9AE75;
+            /* Change the old color so it seems less like an error */
+            font-size: inherit;
+        }
+        /* Page Break : use <div class="page"/> to insert page break
 -------------------------------------------------------- */
-.page {
-	page-break-after: always;
-}
-
-</style>
- <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+        
+        .page {
+            page-break-after: always;
+        }
+    </style>
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
 </head>
 
 <body>
@@ -361,19 +361,20 @@ code {
         mermaid.initialize({
             startOnLoad: true,
             theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast') ?
-                'dark' :
-                'default'
+                'dark' : 'default'
         });
     </script>
     <h1 id="span-style%22displayblocktext-aligncentercolorlightblue%22%E5%9F%BA%E4%BA%8E%E5%9B%BE%E5%83%8F%E9%9A%90%E5%86%99%E7%9A%84r6%E7%9B%B4%E6%92%AD%E6%8A%80%E6%9C%AFspan"><span style="display:block;text-align:center;color:lightblue;">基于图像隐写的R6直播技术</span></h1>
-<p>（哈哈 这个排版 稀烂咯）</p>
-<h2 id="%E7%9B%AE%E6%A0%87">目标</h2>
-<p>我将实验几种算法方法，试图实现简单的图像隐写，或者说“幻影坦克”，我需要寻找可靠性高（抗干扰抗压缩）、计算量小的算法来规避B站的直播系统，加密时只要肉眼看不出问题，解密时只要肉眼能看得出就彩六即可。目前我考虑两种算法，一是原本用于数据增强的<a href="https://www.zhihu.com/question/308572298">mix up</a>算法，他是简单的线性叠加，但是也由于其线性使其很容易逆转；二是后门攻击<a href="https://arxiv.org/abs/1910.00033">《Hidden Trigger Backdoor Attacks》</a>中提到的方法，其原本用于隐藏带有触发器的图片；三是基于缩放的方法（准确的说<a href="www.bilibili.com/video/BV1Lf4y1r7dZ">近邻法</a>），也就是将底图按像素替换mask的一部分，解码就只需要删除特定行列即可；四是末位置0法（准确的说应该是LSB），他实质上是对图的二进制形式进行修改，和mix up类似，但是他解码时不需要知道mask，缺点是不抗压缩；五是基于小波变换，将图片藏到频域；六是基于稀疏表示。除此以外，我可能考虑将图像转为灰度图以减少计算的难度，以及将声音编码进图像中，测试一张图像能叠加多少内容（提高容量可以让我们把一张高清图拆解之后塞进小图里面），检查其在频域的变化，抗干扰测试和抗压缩测试，图像校验和修复。</p>
-<h2 id="%E5%85%8D%E8%B4%A3%E5%A3%B0%E6%98%8E">免责声明</h2>
-<p>孩子不懂事，瞎搞来玩的。不是正经研究，不要问为什么不计算峰值信噪比之类的，本来就是人眼看不出来就行了。有问题不要问作者，作者也不懂。不要试图用这些方法做任何违法违规的事情，对于正儿八经的隐写或者盲水印检测，这些都太落后了。</p>
-<h2 id="mix-up">mix up</h2>
-<p>mix up是一种简单的线性叠加，其表达式可以为$imout=im\times lam+mask\times (1-lam)$，在原本的应用中<code>lam</code>应该是一个随机数矩阵，但是在我们的应用中我们将使用一个固定的数，我们取<code>0.1</code>，因此对应的解码就是$im=(imout-mask\times (1-lam))\div lam$，我们使用代码：</p>
-<pre class="hljs"><code><div>lam=<span class="hljs-number">0.1</span><span class="hljs-comment">#encoder</span>
+    <p>（哈哈 这个排版 稀烂咯）</p>
+    <h2 id="%E7%9B%AE%E6%A0%87">目标</h2>
+    <p>我将实验几种算法方法，试图实现简单的图像隐写，或者说“幻影坦克”，我需要寻找可靠性高（抗干扰抗压缩）、计算量小的算法来规避B站的直播系统，加密时只要肉眼看不出问题，解密时只要肉眼能看得出就彩六即可。目前我考虑两种算法，一是原本用于数据增强的<a href="https://www.zhihu.com/question/308572298">mix up</a>算法，他是简单的线性叠加，但是也由于其线性使其很容易逆转；二是后门攻击<a href="https://arxiv.org/abs/1910.00033">《Hidden Trigger Backdoor Attacks》</a>中提到的方法，其原本用于隐藏带有触发器的图片；三是基于缩放的方法（准确的说
+        <a
+            href="www.bilibili.com/video/BV1Lf4y1r7dZ">近邻法</a>），也就是将底图按像素替换mask的一部分，解码就只需要删除特定行列即可；四是末位置0法（准确的说应该是LSB），他实质上是对图的二进制形式进行修改，和mix up类似，但是他解码时不需要知道mask，缺点是不抗压缩；五是基于小波变换，将图片藏到频域；六是基于稀疏表示。除此以外，我可能考虑将图像转为灰度图以减少计算的难度，以及将声音编码进图像中，测试一张图像能叠加多少内容（提高容量可以让我们把一张高清图拆解之后塞进小图里面），检查其在频域的变化，抗干扰测试和抗压缩测试，图像校验和修复。</p>
+    <h2 id="%E5%85%8D%E8%B4%A3%E5%A3%B0%E6%98%8E">免责声明</h2>
+    <p>孩子不懂事，瞎搞来玩的。不是正经研究，不要问为什么不计算峰值信噪比之类的，本来就是人眼看不出来就行了。有问题不要问作者，作者也不懂。不要试图用这些方法做任何违法违规的事情，对于正儿八经的隐写或者盲水印检测，这些都太落后了。</p>
+    <h2 id="mix-up">mix up</h2>
+    <p>mix up是一种简单的线性叠加，其表达式可以为$imout=im\times lam+mask\times (1-lam)$，在原本的应用中<code>lam</code>应该是一个随机数矩阵，但是在我们的应用中我们将使用一个固定的数，我们取<code>0.1</code>，因此对应的解码就是$im=(imout-mask\times (1-lam))\div lam$，我们使用代码：</p>
+    <pre class="hljs"><code><div>lam=<span class="hljs-number">0.1</span><span class="hljs-comment">#encoder</span>
 im_mixup=(im1*lam+im2*(<span class="hljs-number">1</span>-lam)).astype(uint8)
 plt.subplot(<span class="hljs-number">2</span>,<span class="hljs-number">2</span>,<span class="hljs-number">3</span>),plt.title(<span class="hljs-string">"mix up"</span>),plt.imshow(im_mixup)
 
@@ -381,33 +382,28 @@ plt.subplot(<span class="hljs-number">2</span>,<span class="hljs-number">2</span
 plt.subplot(<span class="hljs-number">2</span>,<span class="hljs-number">2</span>,<span class="hljs-number">4</span>),plt.title(<span class="hljs-string">"encoder"</span>),plt.imshow(((im_mixup-im2*(<span class="hljs-number">1</span>-lam))/lam).astype(uint8))
 plt.show()
 </div></code></pre>
-<p class="hideblack">（是不是很简单）</p>
-<p>我们使用1920×1080的图片进行实验，接下来看看运行结果
-<img src="图像叠加/Figure_1.png" alt="Figure_1原始图">
-粗看没有什么问题，但是我们把图像放大
-<img src="图像叠加/Figure_1-2.png" alt="Figure_1放大图">
-会发现在混合图（第三张，mix up）上面隐约有能看到原图，而求解出来的图上面又有一些噪点，接下来再看一组图</p>
-<p class="hideblack">顺便一提，雪狐真可爱，嘿嘿</p>
-<p><img src="图像叠加/Figure_2.png" alt="Figure_2放大图">
-<img src="图像叠加/Figure_3.png" alt="Figure_3放大图">
-可以看到在浅色mask的情况下的深色内容十分明显，如果变成动态的则更加显眼，同时在色块边缘，特别是颜色变化较大的地方（应该是梯度较大？等下做个RGB的梯度分析吧）杂色更多，可能是还原时小数计算导致的。那么接下来我们试着把原图处理成灰度图。
-<img src="图像叠加/Figure_4.png" alt="Figure_4灰度处理">
-看起来好了点，但是有些地方还是可以透过mask看到内容。如果我们把内容图的占比，也就是<code>lam</code>降低呢？
-<img src="图像叠加/Figure_5.png" alt="Figure_5小lam">
-这里使用了<code>lam=0.02</code>，可以看到，“异构体”的图标确实不见了，但是求解出来的图像基本上失去了内容，目前测试来看0.05以上比较合适（上面一行是叠加图，下面一行是还原图），不过说起来，之后可以根据灰度图的差值优化出一个更优的<code>lam</code>。同时我们还记录了每一次叠图+解析的耗时，显示在图片下方，平均下来这个过程耗时约0.2s（使用i5-7200U@2.50GHz运行）
-<img src="图像叠加/Figure_6.png" alt="Figure_6">
-再来看看以<code>lam=0.1</code>时，进行mix up后他们在频域上的变化（应该是看不出来关系的）
-<img src="图像叠加/Figure_7.png" alt="Figure_7FFT">
-关于抗干扰，从理论上来说，线性叠加是不抗压缩的，但是因为这个算法对于压缩不敏感，特别是灰度之后（不像频域），所以观感上差别不大。如下是通过对mix_up压缩一定比例之后用立方插值（<code>cv2.INTER_CUBIC</code>）重新恢复大小再用正确的mask进行解码的结果
-<img src="图像叠加/Figure_8.png" alt="Figure_8Compress">
-我靠，打脸了，这里模拟压缩之后等效于mask的图形范围变大，覆盖了不少原图。那应用的时候得想办法减少压缩比例才行。或者我们找到这个确切的压缩比例，在还原时也对mask进行压缩或者模糊，通过下图可以看到对于压缩比例不大的情况还是挺有效的：
-<img src="图像叠加/Figure_9.png" alt="Figure_9">
-处理完了图片，我们来看看处理视频的能力，这里主要是看进行叠视频和解视频的耗时，这里以两个分辨率相同长度2分钟的B站视频为例。下图是进行叠图时的实时帧率（用1除以计算时长得到，其中计算时长包括了加密和解密两个过程），两个原视频都是30帧的，实时帧率基本上在25~30帧附件波动（使用i5-7200U@2.50GHz运行），应用时可能要考虑抽帧或者优化算法。
-<img src="图像叠加/Figure_10.png" alt="Figure_10FPS"><br>
-结论：对图像进行灰度化后，使用颜色比较混杂的（比如色系相反）图作为mask，以接近0.1的比例进行叠图是可行的，并且编码解码速度较快。缺点是用户必须知道mask和lam，而且最好知道压缩情况。</p>
-<h2 id="%E8%BF%91%E9%82%BB%E6%B3%95">近邻法</h2>
-<p>近邻法就是简单的替换掉固定区域的像素，因此mask和底图面积大小最好是四倍之类的整数倍关系。然后考虑直接用列表切片不用for循环，这样子计算时间能降不少，关键代码如下：</p>
-<pre class="hljs"><code><div><span class="hljs-keyword">if</span> im1.shape[<span class="hljs-number">0</span>]*sizes!=im2.shape[<span class="hljs-number">0</span>] <span class="hljs-keyword">or</span> im1.shape[<span class="hljs-number">1</span>]*sizes!=im2.shape[<span class="hljs-number">1</span>]:
+    <p class="hideblack">（是不是很简单）</p>
+    <p>我们使用1920×1080的图片进行实验，接下来看看运行结果
+        <img src="./图像叠加/Figure_1.png" alt="Figure_1原始图"> 粗看没有什么问题，但是我们把图像放大
+        <img src="./图像叠加/Figure_1-2.png" alt="Figure_1放大图"> 会发现在混合图（第三张，mix up）上面隐约有能看到原图，而求解出来的图上面又有一些噪点，接下来再看一组图</p>
+    <p class="hideblack">顺便一提，雪狐真可爱，嘿嘿</p>
+    <p><img src="./图像叠加/Figure_2.png" alt="Figure_2放大图">
+        <img src="./图像叠加/Figure_3.png" alt="Figure_3放大图"> 可以看到在浅色mask的情况下的深色内容十分明显，如果变成动态的则更加显眼，同时在色块边缘，特别是颜色变化较大的地方（应该是梯度较大？等下做个RGB的梯度分析吧）杂色更多，可能是还原时小数计算导致的。那么接下来我们试着把原图处理成灰度图。
+        <img src="./图像叠加/Figure_4.png" alt="Figure_4灰度处理"> 看起来好了点，但是有些地方还是可以透过mask看到内容。如果我们把内容图的占比，也就是
+        <code>lam</code>降低呢？
+        <img src="./图像叠加/Figure_5.png" alt="Figure_5小lam"> 这里使用了
+        <code>lam=0.02</code>，可以看到，“异构体”的图标确实不见了，但是求解出来的图像基本上失去了内容，目前测试来看0.05以上比较合适（上面一行是叠加图，下面一行是还原图），不过说起来，之后可以根据灰度图的差值优化出一个更优的<code>lam</code>。同时我们还记录了每一次叠图+解析的耗时，显示在图片下方，平均下来这个过程耗时约0.2s（使用i5-7200U@2.50GHz运行）
+        <img src="./图像叠加/Figure_6.png" alt="Figure_6"> 再来看看以
+        <code>lam=0.1</code>时，进行mix up后他们在频域上的变化（应该是看不出来关系的）
+        <img src="./图像叠加/Figure_7.png" alt="Figure_7FFT"> 关于抗干扰，从理论上来说，线性叠加是不抗压缩的，但是因为这个算法对于压缩不敏感，特别是灰度之后（不像频域），所以观感上差别不大。如下是通过对mix_up压缩一定比例之后用立方插值（
+        <code>cv2.INTER_CUBIC</code>）重新恢复大小再用正确的mask进行解码的结果
+        <img src="./图像叠加/Figure_8.png" alt="Figure_8Compress"> 我靠，打脸了，这里模拟压缩之后等效于mask的图形范围变大，覆盖了不少原图。那应用的时候得想办法减少压缩比例才行。或者我们找到这个确切的压缩比例，在还原时也对mask进行压缩或者模糊，通过下图可以看到对于压缩比例不大的情况还是挺有效的：
+        <img src="./图像叠加/Figure_9.png" alt="Figure_9"> 处理完了图片，我们来看看处理视频的能力，这里主要是看进行叠视频和解视频的耗时，这里以两个分辨率相同长度2分钟的B站视频为例。下图是进行叠图时的实时帧率（用1除以计算时长得到，其中计算时长包括了加密和解密两个过程），两个原视频都是30帧的，实时帧率基本上在25~30帧附件波动（使用i5-7200U@2.50GHz运行），应用时可能要考虑抽帧或者优化算法。
+        <img src="./图像叠加/Figure_10.png" alt="Figure_10FPS"><br> 结论：对图像进行灰度化后，使用颜色比较混杂的（比如色系相反）图作为mask，以接近0.1的比例进行叠图是可行的，并且编码解码速度较快。缺点是用户必须知道mask和lam，而且最好知道压缩情况。
+    </p>
+    <h2 id="%E8%BF%91%E9%82%BB%E6%B3%95">近邻法</h2>
+    <p>近邻法就是简单的替换掉固定区域的像素，因此mask和底图面积大小最好是四倍之类的整数倍关系。然后考虑直接用列表切片不用for循环，这样子计算时间能降不少，关键代码如下：</p>
+    <pre class="hljs"><code><div><span class="hljs-keyword">if</span> im1.shape[<span class="hljs-number">0</span>]*sizes!=im2.shape[<span class="hljs-number">0</span>] <span class="hljs-keyword">or</span> im1.shape[<span class="hljs-number">1</span>]*sizes!=im2.shape[<span class="hljs-number">1</span>]:
         im1=cv2.resize(im1,(im2.shape[<span class="hljs-number">1</span>]//sizes,im2.shape[<span class="hljs-number">0</span>]//sizes))
 
 <span class="hljs-comment">#encoder</span>
@@ -418,25 +414,21 @@ mixup[:mixup.shape[<span class="hljs-number">0</span>]:sizes,:mixup.shape[<span 
 decoder=mixup[:mixup.shape[<span class="hljs-number">0</span>]:sizes,:mixup.shape[<span class="hljs-number">1</span>]:sizes]
 <span class="hljs-keyword">return</span> mixup,decoder
 </div></code></pre>
-<p>运行结果如下
-<img src="图像叠加/Replace_1.png" alt="Replace_1">
-做一个简单的傅里叶变换，可以看到解码出来的图被“放大”了，以及混合时的频域图有多个中心
-<img src="图像叠加/Replace_2.png" alt="Replace_2FFT"><br>
-问题也很明显，如果sizes（控制几乘几个像素为一个单元）太小，隐写太明显，sizes太大，原图压缩太多变糊。我们做了一组测试，第一行是sizes，第二行是混合后的图，第三行是解析出来的图，第四行是运行时间（包括编码解码），可以看到比mix_up快了不少。目前来看sizes选3和4会比较合适
-<img src="图像叠加/Replace_3.png" alt="Replace_3"><br>
-至于抗压缩嘛，这种直接插进像素的方法本身就相当于加噪声，基本上一压缩就没救了。下面是sizes=4时，压缩后复原的结果，基本上就是无法复原
-<img src="图像叠加/Replace_4.png" alt="Replace_4Compress"><br>
-算了，直接看视频的处理情况吧，下图是每帧计算耗时，是挺快的，估计是少了灰度化这类的计算吧。一开始我也想计算帧率的直到他告诉我不能除以零，虽然不知道为什么，但是确实<code>time.time()</code>函数读到的时间差就是0，基本上都在0.005秒内（使用i5-7200U@2.50GHz运行）。
-<img src="图像叠加/Replace_5.png" alt="Replace_5FPS"><br>
-结论就是近邻法运算速度极快，但是信息容量小而且不抗压缩和模糊，可以用这些多出来的时间对原图做点什么。</p>
-<h2 id="%E6%9C%AB%E4%BD%8D%E7%BD%AE0%E6%B3%95lsb">末位置0法（LSB）</h2>
-<p>简单来说就是，一个像素的RGB中的一个分量不是一个八位的二进制嘛，如果删掉最后面的三位，也就是相当于约成8的倍数（至多-7），从视觉上可能效果差不多，删掉的这三位用底图的前三位来替换，G和B通道以此类推，但是B只改两位（不过具体是332还是别的方法，别人有测，先逝世罢）。涉及位运算嘛，所以直接生成模板图来进行cv2的图位运算（而且反正是相同值的模板图，可以拉伸，但是还是先研究$1920\times 1080$的。模板图推算过程如下：<br>
-$([R,G,B]\And[248,248,252]) | \big((T\And[224,28,3])\div[32,4,1]\big)$<br>
-$([R,G,B]\And[0b11111000,0b11111000,0b11111100]) | \big((T\And[0b11100000,0b00011100,0b00000011])\div[0b00100000,0b00000100,0b00000001]\big)$<br>
-$\big((S\And[7,7,3])<em>[32,4,1]\big) \quad \text{#解码过程}$<br>
-$\big((S\And[0b00000111,0b00000111,0b00000011])</em>[0b00100000,0b00000100,0b00000001]\big) \quad \text{#解码过程}$<br>
-其中T是底图的灰度图，是一个深度为3的包含8位二进制的矩阵（就是对灰度图进行拓展到三个通道），如下是关键代码：</p>
-<pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">bits</span><span class="hljs-params">(im1,im2,W:list)</span>:</span>
+    <p>运行结果如下
+        <img src="./图像叠加/Replace_1.png" alt="Replace_1"> 做一个简单的傅里叶变换，可以看到解码出来的图被“放大”了，以及混合时的频域图有多个中心
+        <img src="./图像叠加/Replace_2.png" alt="Replace_2FFT"><br> 问题也很明显，如果sizes（控制几乘几个像素为一个单元）太小，隐写太明显，sizes太大，原图压缩太多变糊。我们做了一组测试，第一行是sizes，第二行是混合后的图，第三行是解析出来的图，第四行是运行时间（包括编码解码），可以看到比mix_up快了不少。目前来看sizes选3和4会比较合适
+        <img src="./图像叠加/Replace_3.png" alt="Replace_3"><br> 至于抗压缩嘛，这种直接插进像素的方法本身就相当于加噪声，基本上一压缩就没救了。下面是sizes=4时，压缩后复原的结果，基本上就是无法复原
+        <img src="./图像叠加/Replace_4.png" alt="Replace_4Compress"><br> 算了，直接看视频的处理情况吧，下图是每帧计算耗时，是挺快的，估计是少了灰度化这类的计算吧。一开始我也想计算帧率的直到他告诉我不能除以零，虽然不知道为什么，但是确实
+        <code>time.time()</code>函数读到的时间差就是0，基本上都在0.005秒内（使用i5-7200U@2.50GHz运行）。
+        <img src="./图像叠加/Replace_5.png" alt="Replace_5FPS"><br> 结论就是近邻法运算速度极快，但是信息容量小而且不抗压缩和模糊，可以用这些多出来的时间对原图做点什么。
+    </p>
+    <h2 id="%E6%9C%AB%E4%BD%8D%E7%BD%AE0%E6%B3%95lsb">末位置0法（LSB）</h2>
+    <p>简单来说就是，一个像素的RGB中的一个分量不是一个八位的二进制嘛，如果删掉最后面的三位，也就是相当于约成8的倍数（至多-7），从视觉上可能效果差不多，删掉的这三位用底图的前三位来替换，G和B通道以此类推，但是B只改两位（不过具体是332还是别的方法，别人有测，先逝世罢）。涉及位运算嘛，所以直接生成模板图来进行cv2的图位运算（而且反正是相同值的模板图，可以拉伸，但是还是先研究$1920\times 1080$的。模板图推算过程如下：<br> $([R,G,B]\And[248,248,252])
+        | \big((T\And[224,28,3])\div[32,4,1]\big)$<br> $([R,G,B]\And[0b11111000,0b11111000,0b11111100]) | \big((T\And[0b11100000,0b00011100,0b00000011])\div[0b00100000,0b00000100,0b00000001]\big)$<br> $\big((S\And[7,7,3])
+        <em>[32,4,1]\big) \quad \text{#解码过程}$<br>
+$\big((S\And[0b00000111,0b00000111,0b00000011])</em>[0b00100000,0b00000100,0b00000001]\big) \quad \text{#解码过程}$<br> 其中T是底图的灰度图，是一个深度为3的包含8位二进制的矩阵（就是对灰度图进行拓展到三个通道），如下是关键代码：
+    </p>
+    <pre class="hljs"><code><div><span class="hljs-function"><span class="hljs-keyword">def</span> <span class="hljs-title">bits</span><span class="hljs-params">(im1,im2,W:list)</span>:</span>
     mixup=(im1&amp;W[<span class="hljs-number">0</span>])|((im2&amp;W[<span class="hljs-number">1</span>])//W[<span class="hljs-number">2</span>])
     decoder=(mixup&amp;W[<span class="hljs-number">3</span>])*W[<span class="hljs-number">2</span>]
     decoder=np.sum(decoder,axis=<span class="hljs-number">2</span>)<span class="hljs-comment">#因为输入是灰度图，这里解算也重新合成为灰度图</span>
@@ -449,24 +441,23 @@ $\big((S\And[0b00000111,0b00000111,0b00000011])</em>[0b00100000,0b00000100,0b000
     rw1=np.repeat(np.repeat([[<span class="hljs-number">7</span>,<span class="hljs-number">7</span>,<span class="hljs-number">3</span>]],<span class="hljs-number">1920</span>,axis=<span class="hljs-number">0</span>),<span class="hljs-number">1080</span>,axis=<span class="hljs-number">0</span>)
     <span class="hljs-keyword">return</span> [w1,w2,w3,rw1]
 </div></code></pre>
-<p>三通道的灰度图我们是通过cv2灰度化然后用np去叠出来的</p>
-<pre class="hljs"><code><div>im1=cv2.cvtColor(im1,cv2.COLOR_BGR2GRAY)
+    <p>三通道的灰度图我们是通过cv2灰度化然后用np去叠出来的</p>
+    <pre class="hljs"><code><div>im1=cv2.cvtColor(im1,cv2.COLOR_BGR2GRAY)
 im1=np.stack((im1,im1,im1),axis=<span class="hljs-number">-1</span>)
 </div></code></pre>
-<p>运行结果和傅里叶变换如下，可以看到和之前的方法相比，无论是空间域还是频域，mask都没有明显的变化，解析的效果也非常好：
-<img src="图像叠加/LSB_1.png" alt="LSB_1">
-<img src="图像叠加/LSB_2.png" alt="LSB_2FFT">
-LSB可调的参数特别少，无非是优化计算流程，调整运算模板的值，所以我们直接来看看抗压缩吧，按理说LSB应该不怎么抗压缩，毕竟后几位很容易被模糊掉。
-<img src="图像叠加/LSB_3.png" alt="LSB_3Compress">
-算了，还是看看视频隐写的情况吧，基本上能保证30帧（使用i5-7200U@2.50GHz运行）。
-<img src="图像叠加/LSB_4.png" alt="LSB_4FPS">
-结论就是LSB作为经典隐写算法，隐蔽效果好（从肉眼的角度来说）但是也不抗模糊，而且目前运算速度也比较感人，应该可以再优化。</p>
-<h2 id="%E5%B0%8F%E6%B3%A2%E5%8F%98%E6%8D%A2">小波变换</h2>
-<p>就是基于离散小波变换（DWT）的图片隐写，小波变换可以理解为以小波基为基的傅里叶变换，对比于傅里叶变换，据说可以更好的隐藏信息，直接把信息藏在特定的频率范围内。我将先尝试把数据转换到频域之后用近邻法来替换，关键代码如下：</p>
-<pre class="hljs"><code><div>
+    <p>运行结果和傅里叶变换如下，可以看到和之前的方法相比，无论是空间域还是频域，mask都没有明显的变化，解析的效果也非常好：
+        <img src="./图像叠加/LSB_1.png" alt="LSB_1">
+        <img src="./图像叠加/LSB_2.png" alt="LSB_2FFT"> LSB可调的参数特别少，无非是优化计算流程，调整运算模板的值，所以我们直接来看看抗压缩吧，按理说LSB应该不怎么抗压缩，毕竟后几位很容易被模糊掉。
+        <img src="./图像叠加/LSB_3.png" alt="LSB_3Compress"> 算了，还是看看视频隐写的情况吧，基本上能保证30帧（使用i5-7200U@2.50GHz运行）。
+        <img src="./图像叠加/LSB_4.png" alt="LSB_4FPS"> 结论就是LSB作为经典隐写算法，隐蔽效果好（从肉眼的角度来说）但是也不抗模糊，而且目前运算速度也比较感人，应该可以再优化。
+    </p>
+    <h2 id="%E5%B0%8F%E6%B3%A2%E5%8F%98%E6%8D%A2">小波变换</h2>
+    <p>就是基于离散小波变换（DWT）的图片隐写，小波变换可以理解为以小波基为基的傅里叶变换，对比于傅里叶变换，据说可以更好的隐藏信息，直接把信息藏在特定的频率范围内。我将先尝试把数据转换到频域之后用近邻法来替换，关键代码如下：</p>
+    <pre class="hljs"><code><div>
 </div></code></pre>
 
 </body>
 <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 <script type="text/x-mathjax-config"> MathJax.Hub.Config({ tex2jax: {inlineMath: [['$', '$']]}, messageStyle: "none" });</script>
+
 </html>
