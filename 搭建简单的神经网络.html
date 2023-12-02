@@ -368,15 +368,17 @@ code {
 <h1 id="span-style%22displayblocktext-aligncentercolorlightblue%22%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E7%BD%91%E7%BB%9Cspan"><span style="display:block;text-align:center;color:lightblue;">搭建一个简单的网络</span></h1>
 <h2 id="%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2">写在前面</h2>
 <h3 id="%E7%9E%8E%E6%89%AF">瞎扯</h3>
-<p>我们终究不是做研究的，因此对于神经网络，只要会看流程图然后直接搭，或者直接调包就行了，所以我们需要搞明白的是：有什么输入、有什么输出、需要什么模块。本文将讲述Pytorch和TensorFlow的基础组件，用他们搭建出一个简单的神经网络，并进行量化。本文还会对比两个库一些操作的异同（都是坑啊），并展示几种模型的转换。TensorFlow主要是使用Keras框架和TensorFlow Lite（好吧，其实都是在TensorFlow库）</p>
+<p>我们终究不是做研究的，因此对于神经网络，只要会看流程图然后直接搭，或者直接调包就行了，所以我们需要搞明白的是：有什么输入、有什么输出、需要什么模块。本文将讲述Pytorch和TensorFlow的基础组件，用他们<strong>搭建</strong>出一个简单的神经网络，并进行<strong>量化</strong>。本文还会对比两个库一些操作的异同（都是坑啊），并展示几种模型的转换。TensorFlow主要是使用Keras框架和TensorFlow Lite（好吧，其实都是在TensorFlow库）</p>
+<h3 id="%E4%BD%A0%E9%9C%80%E8%A6%81%E7%9A%84%E5%9F%BA%E7%A1%80">你需要的基础</h3>
+<p>你需要知道Python的基础语法，有Numpy的基础，知道什么是卷积，以及卷积的相关知识。文章将会先讲解两个库的组件，如何搭建神经网络，如何进行<a href="#%E4%BB%80%E4%B9%88%E6%98%AF%E9%87%8F%E5%8C%96">量化</a>。</p>
 <h3 id="%E6%95%B0%E6%8D%AE%E7%9A%84%E7%BB%93%E6%9E%84">数据的结构</h3>
-<p>在这里，我们以图像分类为例，在我们传统认知中，一张图的参数有长宽和通道数，所以图像分类的输入就是一个三维数组，吗？可以，但是一般我们不会只输入一张图去训练，一般来说会一个批（batch）一起训练，所以就还有一个参数<strong>batchSize</strong>，也就是说一般是一个四维数组。<br>
+<p>在这里，我们以图像分类为例，在我们传统认知中，一张图的参数有长宽和通道数（就是RGB三通道啦），所以图像分类的输入就是一个三维数组，吗？可以，但是一般我们不会只输入一张图去训练，一般来说会一个批（batch）一起训练，所以就还有一个参数<strong>batchSize</strong>，也就是说一般是一个四维数组。<br>
 需要注意的是，<strong>Pytorch和TensorFlow的输入结构不同</strong>，Pytorch的输入为<code>(batchSize,channel,height,width)</code>既NCHW，而TensorFlow为<code>(batchSize,height,width,channel)</code>既NHWC。<br>
-<a href="https://blog.csdn.net/feng_xun123/article/details/108960632">为什么</a></p>
+<a href="https://blog.csdn.net/feng_xun123/article/details/108960632">为什么两个库的存储结构不同呢？</a></p>
 <h3 id="%E6%95%B0%E6%8D%AE%E7%9A%84%E7%B1%BB%E5%9E%8B">数据的类型</h3>
-<p>就是dtype啦，Pytorch用的是<code>torch.</code>比如<code>torch.uint8</code>，这是因为Pytorch的数据都是以<code>torch.Tensor</code>的形式存在的。而TensorFlow可能直接用numpy的ndarray，这是因为TensorFlow可以将其自动转化为<code>tf.Tensor</code>，所以其dtype也是numpy的，比如<code>numpy.uint8</code>。</p>
+<p>就是<strong>dtype</strong>啦，Pytorch用的是<code>torch.</code>比如<code>torch.uint8</code>，这是因为Pytorch的数据都是以<code>torch.Tensor</code>的形式存在的（可以理解为多维数组）。而TensorFlow可能直接用numpy的ndarray，这是因为TensorFlow可以将其自动转化为<code>tf.Tensor</code>，所以其dtype也是numpy的，比如<code>numpy.uint8</code>。</p>
 <h3 id="%E8%BF%90%E8%A1%8C%E7%9A%84%E8%AE%BE%E5%A4%87">运行的设备</h3>
-<p>就是device啦，需要注意的是，Pytorch有CPU和同时兼容GPU/CPU的版本，而在训练时，如果使用GPU进行训练的话，需要对输入进行<code>.to(device)</code>，也需要对模型进行，具体如下：</p>
+<p>就是<strong>device</strong>啦，需要注意的是，Pytorch有CPU和同时兼容GPU/CPU的版本，而在训练时，如果使用GPU进行训练的话，需要对输入进行<code>.to(device)</code>，也需要对模型进行，具体如下：</p>
 <pre class="hljs"><code><div><span class="hljs-keyword">import</span> torch
 device=torch.device(<span class="hljs-string">"cuda"</span> <span class="hljs-keyword">if</span> torch.cuda.is_available() <span class="hljs-keyword">else</span> <span class="hljs-string">"cpu"</span>)<span class="hljs-comment">#这一句是判断有没有GPU的，语法为torch.device(设备名字)，比如torch.device("cuda1")</span>
 model=CNN(inputChannels,width,height,num=<span class="hljs-number">3</span>)
@@ -389,7 +391,7 @@ inputs.to(device)<span class="hljs-comment">#将输入加载到指定的设备�
 outputs=model(inputs)
 print(<span class="hljs-string">"Output shape:"</span>,outputs)
 </div></code></pre>
-<p>相应的，如果是TensorFlow：</p>
+<p>相应的，如果是TensorFlow可以使用<code>with tf.device(device)</code>：</p>
 <pre class="hljs"><code><div><span class="hljs-keyword">import</span> tensorflow <span class="hljs-keyword">as</span> tf
 <span class="hljs-keyword">import</span> numpy <span class="hljs-keyword">as</span> np
 
@@ -408,15 +410,11 @@ inputs=np.random.rand(<span class="hljs-number">1</span>,<span class="hljs-numbe
 print(<span class="hljs-string">"Output shape:"</span>,outputs)
 </div></code></pre>
 <p>由于需要CPU对GPU进行数据的I/O，如果服务器的CPU拉胯的话会出现瓶颈。<a href="https://www.autodl.com/docs/gpu/">关于这点，可以看看这里（不是广告）。</a></p>
-<h3 id="%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0">激活函数</h3>
-<p>激活函数主要分为两种，一种是像tanh一样两端趋向某两个值的，另一种是像ReLU一样只有一端收敛与函数的（收敛于y=x）。简单点，这里只考虑常用的两个激活函数：sigmoid和ReLU，他们的形态如下：
-<img src="image.png" alt="激活函数示意图">
-所以sigmoid一般用在需要对输出进行归一化的地方，比如分类中的概率；而如果提取特征的话，一般就用ReLU，比如卷积层后面接的大多是ReLU。更多信息请看：<a href="https://blog.csdn.net/hy592070616/article/details/120616475">激活函数汇总1</a>，<a href="https://zhuanlan.zhihu.com/p/70810466">激活函数汇总2</a></p>
 <h2 id="%E6%9C%89%E4%BB%80%E4%B9%88%E7%BB%84%E4%BB%B6">有什么组件</h2>
 <p>传统的神经网络可以分为特征提取和分类两个部分，特征提取有卷积、残差、自动编码器等方法，分类部分可以是传统的K临近、支持向量机、全连接。在TensorFlow部分，我们用的是Keras框架，故以下Keras等价于TensorFlow。</p>
-<h3 id="%E5%85%A8%E8%BF%9E%E6%8E%A5">全连接</h3>
+<h3 id="%E5%85%A8%E8%BF%9E%E6%8E%A5%E5%B1%82">全连接层</h3>
 <p>全连接层一般用于分类，放在特征提取部分后面，其输入和输出都是一维的（不考虑batchSize的话）。<br>
-<a href="https://pytorch.org/docs/stable/generated/torch.nn.Linear.html">Pytorch</a></p>
+<a href="https://pytorch.org/docs/stable/generated/torch.nn.Linear.html"><strong>Pytorch</strong></a></p>
 <pre class="hljs"><code><div>torch.nn.Linear(in_features,out_features,bias=<span class="hljs-literal">True</span>,device=<span class="hljs-literal">None</span>,dtype=<span class="hljs-literal">None</span>)
 Example:
 torch.nn.Linear(<span class="hljs-number">12</span>,<span class="hljs-number">1</span>,bias=<span class="hljs-literal">False</span>)
@@ -428,18 +426,99 @@ bias是bool值，表示是否要开启bias</p>
 <p>什么是bias？就是$\hat{y}=wx+b$的<em>b</em></p>
 </blockquote>
 <p><a href="#%E8%BF%90%E8%A1%8C%E7%9A%84%E8%AE%BE%E5%A4%87">device</a>和<a href="#%E6%95%B0%E6%8D%AE%E7%9A%84%E7%B1%BB%E5%9E%8B">dtype</a>，上面有说，不再赘述。<br>
-<a href="https://keras.io/api/layers/core_layers/dense/">Keras</a></p>
+<a href="https://keras.io/api/layers/core_layers/dense/"><strong>Keras</strong></a></p>
 <pre class="hljs"><code><div>tf.keras.layers.Dense(
     units,
     activation=<span class="hljs-literal">None</span>,
     use_bias=<span class="hljs-literal">True</span>
-)<span class="hljs-comment">#我们主要看这三个参数</span>
+)<span class="hljs-comment">#我们主要看这三个参数，其余参数见文档</span>
 Example:
 tf.keras.layers.Dense(<span class="hljs-number">1</span>,activation=<span class="hljs-string">'sigmoid'</span>,use_bias=<span class="hljs-literal">False</span>)
 </div></code></pre>
 <p>units是指输出的大小，Keras是不管输入的大小的，所以需要对模型进行初始化<br>
 activation是指激活函数，和Pytorch不同，Keras没有把激活函数分开（不过Keras也有可单独调用的<a href="https://keras.io/api/layers/activations/">激活函数</a>），而是直接写在参数里，如果不需要激活函数，那就用默认的None即可<br>
 use_bias和Pytorch一样，表示是否要开启bias</p>
-
+<h3 id="%E4%BA%8C%E7%BB%B4%E5%8D%B7%E7%A7%AF%E5%B1%82">（二维）卷积层</h3>
+<p>我们的目的是做图像分类，所以现在只考虑二维卷积层，下称卷积层。卷积层的作用是提取图像的特征，一个卷积层有多个卷积核，其结果放在不同通道，因此一张单通道的图放进去，出来可能就变成了16通道（有16个不同的卷积核）。<br>
+<a href="https://pytorch.org/docs/stable/generated/torch.nn.Conv2d.html"><strong>Python</strong></a></p>
+<pre class="hljs"><code><div>torch.nn.Conv2d(in_channels,out_channels,kernel_size,stride=<span class="hljs-number">1</span>,padding=<span class="hljs-number">0</span>,dilation=<span class="hljs-number">1</span>,groups=<span class="hljs-number">1</span>,bias=<span class="hljs-literal">True</span>,padding_mode=<span class="hljs-string">'zeros'</span>,device=<span class="hljs-literal">None</span>,dtype=<span class="hljs-literal">None</span>)
+Example:
+torch.nn.Conv2d(<span class="hljs-number">1</span>,<span class="hljs-number">3</span>,kernel_size=<span class="hljs-number">14</span>)
+</div></code></pre>
+<p>in_channels,out_channels就是输入输出的通道数<br>
+kernel_size是卷积核的大小<br>
+stride是卷积核每一步的滑动距离<br>
+padding是填充的大小，dilation_mode就是填充方式<br>
+dilation和groups是更进一步的内容了，用不上就不赘述了<br>
+<a href="https://keras.io/zh/layers/convolutional/"><strong>Keras</strong></a></p>
+<pre class="hljs"><code><div>keras.layers.Conv2D(filters,kernel_size,strides=(<span class="hljs-number">1</span>,<span class="hljs-number">1</span>),padding=<span class="hljs-string">'valid'</span>,data_format=<span class="hljs-literal">None</span>,dilation_rate=(<span class="hljs-number">1</span>,<span class="hljs-number">1</span>),activation=<span class="hljs-literal">None</span>,use_bias=<span class="hljs-literal">True</span>,kernel_initializer=<span class="hljs-string">'glorot_uniform'</span>,bias_initializer=<span class="hljs-string">'zeros'</span>,kernel_regularizer=<span class="hljs-literal">None</span>,bias_regularizer=<span class="hljs-literal">None</span>,activity_regularizer=<span class="hljs-literal">None</span>,kernel_constraint=<span class="hljs-literal">None</span>,bias_constraint=<span class="hljs-literal">None</span>)
+Example:
+tf.keras.layers.Conv2D(<span class="hljs-number">3</span>,kernel_size=<span class="hljs-number">14</span>)
+</div></code></pre>
+<p>参数有点多，但是常用的参数总体上和Pytorch基本相似，不同点在于TensorFlow可以让卷积核在两个方向上滑动步长不同，以及和全连接一样可以把激活函数嵌进去。注意filters是卷积核的数量，这是与Pytorch不同的（尽管在样例中他们用相同的值）。</p>
+<h3 id="%E6%BF%80%E6%B4%BB%E5%87%BD%E6%95%B0%E5%B1%82">激活函数层</h3>
+<p>这里只考虑常用的两个激活函数：sigmoid和ReLU，他们的形态如下：
+<img src="./af.png" alt="激活函数示意图"><br>
+sigmoid一般用在需要对输出进行归一化的地方，比如分类中<strong>用sigmoid处理全连接的输出来表示概率</strong>；而如果提取特征的话，一般就用ReLU，比如<strong>卷积层后面接的大多是ReLU</strong>。更多信息请看：<a href="https://blog.csdn.net/hy592070616/article/details/120616475">激活函数汇总1</a>，<a href="https://zhuanlan.zhihu.com/p/70810466">激活函数汇总2</a>。<br>
+<a href="https://pytorch.org/docs/stable/nn.html#non-linear-activations-weighted-sum-nonlinearity"><strong>Pytorch</strong></a></p>
+<pre class="hljs"><code><div>self.conv1=torch.nn.Sequential(
+    torch.nn.Conv2d(<span class="hljs-number">1</span>,<span class="hljs-number">3</span>,kernel_size=<span class="hljs-number">14</span>),
+    torch.nn.ReLU(),
+)
+</div></code></pre>
+<p><a href="https://keras.io/api/layers/activation_layers/"><strong>Keras</strong></a><br>
+除了前面提到的可以单独调用的激活函数，还有可以单独调用的激活函数层，我们可以往卷积层后面塞这个，比如</p>
+<pre class="hljs"><code><div>self.conv1=tf.keras.Sequential([<span class="hljs-comment">#这个可以把多个层放在一起，方便管理和构造更大的块，之后会讲</span>
+    tf.keras.layers.Conv2D(<span class="hljs-number">3</span>,kernel_size=<span class="hljs-number">14</span>),
+    tf.keras.layers.ReLU()
+])
+</div></code></pre>
+<h3 id="%E8%BE%93%E5%85%A5%E5%B1%82%E5%BB%BA%E9%80%A0%E4%B8%AD">输入层（建造中）</h3>
+<p><a href="https://keras.io/api/layers/core_layers/input/"><strong>Keras</strong></a></p>
+<pre class="hljs"><code><div>tf.keras.layers.Input(
+    shape=<span class="hljs-literal">None</span>,
+    batch_size=<span class="hljs-literal">None</span>,
+    name=<span class="hljs-literal">None</span>,
+    dtype=<span class="hljs-literal">None</span>,
+    sparse=<span class="hljs-literal">None</span>,
+    tensor=<span class="hljs-literal">None</span>,
+    ragged=<span class="hljs-literal">None</span>.
+    type_spec=<span class="hljs-literal">None</span>,
+)
+Example:
+layers.Input(shape=(blockSize*height,blockSize*width),dtype=np.float32)
+</div></code></pre>
+<h3 id="%E5%87%BD%E6%95%B0%E5%B1%82%E5%BB%BA%E9%80%A0%E4%B8%AD">函数层（建造中）</h3>
+<pre class="hljs"><code><div>tf.keras.layers.Lambda
+</div></code></pre>
+<h2 id="%E9%87%8F%E5%8C%96">量化</h2>
+<h3 id="%E4%BB%80%E4%B9%88%E6%98%AF%E9%87%8F%E5%8C%96">什么是量化</h3>
+<p>简单来说，就是简化神经网络的结构（合并一些层），减小参数的数据量（比如说，把float32类型的权重变为int8型），通过一系列方法压缩模型体积来满足嵌入式设备的要求。</p>
+<style>
+        /*黑幕组件*/
+        
+        .black {
+            display: inline;
+            background-color: rgba(0, 0, 0, 1);
+        }
+        
+        .black:hover {
+            display: inline;
+            background-color: rgba(0, 0, 0, 0);
+        }
+</style>
+<script>
+    /*LaTeX组件*/
+        MathJax = {
+            // 仅仅为标志符，表示在这个符号中间的内容为公式内容，官方文档多了['(',')']
+            tex: {
+                inlineMath: [
+                    ['$', '$']
+                ]
+            }
+        };
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </body>
 </html>
